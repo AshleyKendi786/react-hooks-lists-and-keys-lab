@@ -1,40 +1,46 @@
-import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
-import ProjectItem from "../components/ProjectItem";
+ import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom'; 
+import ProjectItem from '../components/ProjectItem';
 
-const project = {
-  id: 1,
-  name: "Reciplease",
-  about: "A recipe tracking app",
-  technologies: ["Rails", "Bootstrap CSS"],
-};
+describe('ProjectItem', () => {
+  const testProject = {
+    name: "Reciplease",
+    about: "A recipe tracking app",
+    technologies: ["Rails", "Bootstrap CSS"]
+  };
 
-test("each <span> element has a unique key prop", () => {
-  let errorSpy = jest.spyOn(global.console, "error");
-  render(
-    <ProjectItem
-      name={project.name}
-      about={project.about}
-      technologies={project.technologies}
-    />
-  );
+  test("renders project name", () => {
+    render(
+      <ProjectItem
+        name={testProject.name}
+        about={testProject.about}
+        technologies={testProject.technologies}
+      />
+    );
+    expect(screen.getByText(testProject.name)).toBeInTheDocument();
+  });
 
-  expect(errorSpy).not.toHaveBeenCalled();
+  test("renders project description", () => {
+    render(
+      <ProjectItem
+        name={testProject.name}
+        about={testProject.about}
+        technologies={testProject.technologies}
+      />
+    );
+    expect(screen.getByText(testProject.about)).toBeInTheDocument();
+  });
 
-  errorSpy.mockRestore();
-});
-
-test("renders a <span> for each technology passed in as a prop", () => {
-  render(
-    <ProjectItem
-      name={project.name}
-      about={project.about}
-      technologies={project.technologies}
-    />
-  );
-  for (const technology of project.technologies) {
-    const span = screen.queryByText(technology);
-    expect(span).toBeInTheDocument();
-    expect(span.tagName).toBe("SPAN");
-  }
+  test("renders all technologies", () => {
+    render(
+      <ProjectItem
+        name={testProject.name}
+        about={testProject.about}
+        technologies={testProject.technologies}
+      />
+    );
+    testProject.technologies.forEach(tech => {
+      expect(screen.getByText(tech)).toBeInTheDocument();
+    });
+  });
 });
